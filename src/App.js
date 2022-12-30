@@ -18,8 +18,8 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Navigate to="/welcome" />} />
-          <Route path="/welcome" element={<WelcomePage />} />
+          <Route path="/" element={<Navigate to="/quotes" />} />
+
           <Route path="/quotes/*" element={<QuotesPage />}>
             <Route index element={<QuoteList />} />
 

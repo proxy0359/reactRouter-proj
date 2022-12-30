@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 const NewCommentForm = (props) => {
   const [nameInput, setNameInput] = useState("");
-  const [commentInput, setCommentInput] = useState("  ");
+  const [commentInput, setCommentInput] = useState("");
   const [nameInputError, setNameInputError] = useState(false);
   const [commentInputError, setCommentInputError] = useState(false);
 
@@ -23,8 +23,8 @@ const NewCommentForm = (props) => {
   const inputNameHandler = (event) => {
     setNameInput(event.target.value);
   };
-  const nameIsValid = nameInput && nameInput.length !== "";
-  const commendIsValid = commentInput && commentInput.length !== "";
+  const nameIsValid = nameInput && nameInput.trim().length !== 0;
+  const commendIsValid = commentInput && commentInput.trim().length !== 0;
 
   //submit Handler
 
@@ -37,7 +37,10 @@ const NewCommentForm = (props) => {
     }
 
     if (!commendIsValid) {
-      setCommentInputError(false);
+      setCommentInputError(true);
+      return;
+    }
+    if (!nameIsValid && !commendIsValid) {
       return;
     }
 
@@ -58,8 +61,12 @@ const NewCommentForm = (props) => {
   return (
     <form className={classes.form} onSubmit={submitFormHandler}>
       <div className={classes.control} onSubmit={submitFormHandler}>
+        {nameInputError && <p className={classes.error}>Name is invalid</p>}
         <label htmlFor="name">Name</label>
         <input id="name" onChange={inputNameHandler} value={nameInput} />
+        {commentInputError && (
+          <p className={classes.error}>Comment Is Invalid</p>
+        )}
         <label htmlFor="comment">Your Comment</label>
         <textarea
           id="comment"
