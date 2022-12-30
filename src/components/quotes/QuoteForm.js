@@ -5,6 +5,8 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import classes from "./QuoteForm.module.css";
 import { sendComment } from "../util/api";
 
+import { useParams } from "react-router-dom";
+
 let sentMessage = false;
 
 const QuoteForm = (props) => {
@@ -16,6 +18,8 @@ const QuoteForm = (props) => {
   const [sentMessage, setSentMessage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formFocus, setFormFocus] = useState(false);
+  const param = useParams();
+  console.log(param);
 
   const authorIsValid = authorInput.trim() !== "";
 

@@ -4,12 +4,15 @@ import { useState } from "react";
 import classes from "./NewCommentForm.module.css";
 import { makeComment } from "../util/api";
 import { set } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 const NewCommentForm = (props) => {
-  const [nameInput, setNameInput] = useState();
-  const [commentInput, setCommentInput] = useState();
+  const [nameInput, setNameInput] = useState("");
+  const [commentInput, setCommentInput] = useState("  ");
   const [nameInputError, setNameInputError] = useState(false);
   const [commentInputError, setCommentInputError] = useState(false);
+
+  const param = useParams();
 
   //comment input handler
   const commentInputHandler = (event) => {
@@ -39,7 +42,7 @@ const NewCommentForm = (props) => {
     }
 
     makeComment({
-      id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+      id: param.id,
       name: nameInput,
       comment: commentInput,
     });

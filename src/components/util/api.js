@@ -54,13 +54,12 @@ export const getCommentData = async () => {
 export const makeComment = async (data) => {
   try {
     const response = await fetch(
-      "https://food-order-app-fed0b-default-rtdb.asia-southeast1.firebasedatabase.app/comment.json",
+      `https://food-order-app-fed0b-default-rtdb.asia-southeast1.firebasedatabase.app/comment/${data.id}.json`,
       {
         method: "POST",
         body: JSON.stringify({
           name: data.name,
-          id: data.id,
-
+          id: Date.now().toString(36) + Math.random().toString(36).substr(2),
           comment: data.comment,
         }),
       }
@@ -74,10 +73,10 @@ export const makeComment = async (data) => {
   }
 };
 
-export const getComment = async () => {
+export const getComment = async (commentId) => {
   try {
     const response = await fetch(
-      "https://food-order-app-fed0b-default-rtdb.asia-southeast1.firebasedatabase.app/comment.json"
+      `https://food-order-app-fed0b-default-rtdb.asia-southeast1.firebasedatabase.app/comment/${commentId}.json`
     );
     if (!response.ok) {
       throw new Error("Can't get the comment");
@@ -92,6 +91,8 @@ export const getComment = async () => {
         comment: data[i].comment,
       });
     }
+    console.log(comments);
+    console.log(data);
 
     return comments;
   } catch (err) {
