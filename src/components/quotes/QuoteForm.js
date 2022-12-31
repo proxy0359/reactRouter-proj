@@ -15,6 +15,8 @@ const QuoteForm = (props) => {
   const [authIsTouched, setAuthorIsTouched] = useState(false);
   const [textIsTouched, setTextIsTouched] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [authorError, setAuthorError] = useState(false);
+  const [textError, setTextError] = useState(false);
   const [sentMessage, setSentMessage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formFocus, setFormFocus] = useState(false);
@@ -60,13 +62,15 @@ const QuoteForm = (props) => {
     setIsLoading(true);
 
     if (!authorIsValid) {
-      console.log("Please enter a valid output");
-      setIsError(true);
-      return;
+      setAuthorError(true);
+      setIsLoading(false);
     }
     if (!textIsValid) {
-      console.log("Please enter a valid output");
-      setIsError(true);
+      setTextError(true);
+      setIsLoading(false);
+    }
+    if (!authorIsValid && !textIsValid) {
+      setIsLoading(false);
       return;
     }
 
@@ -89,7 +93,22 @@ const QuoteForm = (props) => {
     setAuthorIsTouched(false);
     setTextIsTouched(false);
     setIsLoading(false);
+
+    setAuthorError(false);
+    setTextError(false);
   }
+
+  const showAuthorError = authorError && (
+    <p className={classes.error} align="center">
+      Invalid Author
+    </p>
+  );
+
+  const showTextError = textError && (
+    <p className={classes.error} align="center">
+      Invalid Text
+    </p>
+  );
 
   return (
     <Card>
@@ -98,14 +117,13 @@ const QuoteForm = (props) => {
         onSubmit={submitFormHandler}
         onFocus={formFocusHandler}
       >
-        {sentMessage && <p>Quotes has been sent</p>}
-        {isLoading && (
-          <div className={classes.loading}>
-            <LoadingSpinner />
-          </div>
+        {sentMessage && (
+          <p className={classes.success} align="center">
+            Quotes has been sent
+          </p>
         )}
-
-        {isError && <p>Please enter a valid input</p>}
+        {showAuthorError}
+        {showTextError}
 
         <div className={classes.control}>
           <label htmlFor="author">Author</label>

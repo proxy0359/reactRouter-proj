@@ -47,3 +47,10 @@
 .actions button {
   font-size: 1.25rem;
 }
+.success {
+  color: #28a745;
+}
+
+.error {
+  color: #dc3545;
+}
