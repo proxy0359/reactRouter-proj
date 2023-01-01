@@ -13,7 +13,7 @@ const Header = () => {
               to="/quotes"
               className={(navData) => (navData.isActive ? style.active : "")}
             >
-              AllQuotessss
+              AllQuotes
             </NavLink>
           </li>
           <li>
