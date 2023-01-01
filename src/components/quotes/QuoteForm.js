@@ -21,11 +21,11 @@ const QuoteForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formFocus, setFormFocus] = useState(false);
   const param = useParams();
-  console.log(param);
 
-  const authorIsValid = authorInput.trim() !== "";
+  const authorIsValid = authorInput.trim().length !== 0;
 
-  const textIsValid = textInput.trim() !== "";
+  const textIsValid = textInput.trim().length !== 0;
+  const formIsValid = textIsValid && authorIsValid;
 
   const authorInputHandler = (event) => {
     setAuthorInput(event.target.value);
@@ -38,11 +38,15 @@ const QuoteForm = (props) => {
   const authBlurHandler = () => {
     setAuthorIsTouched(true);
     setSentMessage(false);
+    if (authorIsValid) setAuthorError(false);
+    else setAuthorError(true);
   };
 
   const textBlurHandler = () => {
     setTextIsTouched(true);
     setSentMessage(false);
+    if (textIsValid) setTextError(false);
+    else setTextError(true);
   };
 
   // what a bummer ,   router 6.7 dosn't support usePrompt (gawa nalang custom hook wag kang tamad)
@@ -59,18 +63,19 @@ const QuoteForm = (props) => {
 
   async function submitFormHandler(event) {
     event.preventDefault();
+
     setIsLoading(true);
 
     if (!authorIsValid) {
       setAuthorError(true);
+
       setIsLoading(false);
     }
     if (!textIsValid) {
       setTextError(true);
       setIsLoading(false);
     }
-    if (!authorIsValid && !textIsValid) {
-      setIsLoading(false);
+    if (!formIsValid) {
       return;
     }
 
@@ -82,7 +87,7 @@ const QuoteForm = (props) => {
         text: textInput,
       });
     } catch (err) {
-      throw err;
+      return err;
     }
     setIsError(false);
 
@@ -98,17 +103,14 @@ const QuoteForm = (props) => {
     setTextError(false);
   }
 
-  const showAuthorError = authorError && (
-    <p className={classes.error} align="center">
-      Invalid Author
-    </p>
-  );
-
-  const showTextError = textError && (
-    <p className={classes.error} align="center">
-      Invalid Text
-    </p>
-  );
+  let errorText;
+  if (authorError && textError) {
+    errorText = "Please enter a valid input";
+  } else if (authorError) {
+    errorText = "Invalid Author";
+  } else if (textError) {
+    errorText = "Invalid Text";
+  }
 
   return (
     <Card>
@@ -122,34 +124,44 @@ const QuoteForm = (props) => {
             Quotes has been sent
           </p>
         )}
-        {showAuthorError}
-        {showTextError}
+        {errorText && (
+          <p className={classes.error} align="center">
+            {errorText}
+          </p>
+        )}
 
-        <div className={classes.control}>
-          <label htmlFor="author">Author</label>
-          <input
-            type="text"
-            id="author"
-            onChange={authorInputHandler}
-            onBlur={authBlurHandler}
-            value={authorInput}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="text">Text</label>
-          <textarea
-            id="text"
-            rows="5"
-            onChange={textInputHandler}
-            onBlur={textBlurHandler}
-            value={textInput}
-          ></textarea>
-        </div>
-        <div className={classes.actions}>
-          <button className="btn" onClick={doneEditingHandler}>
-            Add Quote
-          </button>
-        </div>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <div className={classes.control}>
+              <label htmlFor="author">Author</label>
+              <input
+                type="text"
+                id="author"
+                onChange={authorInputHandler}
+                onBlur={authBlurHandler}
+                value={authorInput}
+              />
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="text">Text</label>
+              <textarea
+                id="text"
+                rows="5"
+                onChange={textInputHandler}
+                onBlur={textBlurHandler}
+                value={textInput}
+              ></textarea>
+            </div>
+
+            <div className={classes.actions}>
+              <button className="btn" onClick={doneEditingHandler}>
+                Add Quote
+              </button>
+            </div>
+          </>
+        )}
       </form>
     </Card>
   );

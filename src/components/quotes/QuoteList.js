@@ -34,7 +34,7 @@ const QuoteList = () => {
     };
 
     data();
-  }, []);
+  }, [setQuotes]);
 
   const sortedQuotes = useMemo(() => {
     if (queryParams.get("sort") === "asc") {
