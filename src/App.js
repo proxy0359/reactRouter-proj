@@ -1,9 +1,14 @@
 import React, { Fragment } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Comments from "./components/comments/Comments";
-import Header from "./components/layout/Header";
-import WelcomePage from "./components/pages/WelcomePage";
-import NewCommentForm from "./components/comments/NewCommentForm";
+import {
+  BrowserRouter,
+  RouterProvider,
+  createBrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  createRoutesFromElements,
+} from "react-router-dom";
+
 import QuoteForm from "./components/quotes/QuoteForm";
 import QuoteItem from "./components/quotes/QuoteItem";
 import QuoteList from "./components/quotes/QuoteList";
@@ -13,28 +18,28 @@ import NoQuotesFound from "./components/quotes/NoQuotesFound";
 import QuotesPage from "./components/pages/QuotesPage";
 import PageNotFound from "./components/pages/PageNotFound";
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />} errorElement={<NoQuotesFound />}g>
+      <Route index element={<Navigate to="/quotes" />} />
+
+      <Route path="/quotes/*" element={<QuotesPage />}>
+        <Route index element={<QuoteList />} />
+
+        <Route path=":id/*" element={<HighlightedQuote />} />
+      </Route>
+
+      <Route path="/add" element={<QuoteForm />} />
+      <Route path="*" element={<PageNotFound />} />
+    </Route>
+  )
+);
+
 function App() {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/quotes" />} />
-
-          <Route path="/quotes/*" element={<QuotesPage />}>
-            <Route index element={<QuoteList />} />
-
-            <Route
-              path=":id/*"
-              element={<HighlightedQuote />}
-              errorElement={<NoQuotesFound />}
-            />
-          </Route>
-
-          <Route path="/add" element={<QuoteForm />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }
 

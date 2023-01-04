@@ -56,3 +56,7 @@
 .actions button {
   font-size: 1.25rem;
 }
+
+.error {
+  color: rgb(236, 11, 11);
+}

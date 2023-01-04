@@ -8,14 +8,15 @@ import { useParams } from "react-router-dom";
 const CommentsList = () => {
   const [comments, setComments] = useState([]);
   const param = useParams();
+  const { id } = param;
   useEffect(() => {
     const data = async () => {
       const data = await getComment(param.id);
-      console.log(param.id);
+      console.log(id);
       setComments(data);
     };
     data();
-  }, [setComments]);
+  }, [setComments, id]);
   return (
     <ul className={classes.comments}>
       {comments &&

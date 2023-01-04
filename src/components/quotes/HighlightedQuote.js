@@ -33,7 +33,7 @@ const HighlightedQuote = (props) => {
       }
     };
     data();
-  }, []);
+  }, [setQuotes]);
   console.log(noQuotes);
   if (noQuotes) {
     return <NoQuotesFound />;

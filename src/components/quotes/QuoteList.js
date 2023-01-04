@@ -7,8 +7,6 @@ import { getCommentData } from "../util/api";
 
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
-let runThis = false;
-
 const QuoteList = () => {
   const [quotes, setQuotes] = useState([]);
 
@@ -20,6 +18,7 @@ const QuoteList = () => {
   console.log(queryParams);
 
   const isSortAscending = queryParams.get("sort") === "asc";
+  const queryGet = queryParams.get("sort");
 
   const sortingHandler = () => {
     navigate({ search: `?sort=${isSortAscending ? "desc" : "asc"}` });
@@ -37,7 +36,7 @@ const QuoteList = () => {
   }, [setQuotes]);
 
   const sortedQuotes = useMemo(() => {
-    if (queryParams.get("sort") === "asc") {
+    if (queryGet === "asc") {
       return [...quotes].sort((a, b) => {
         if (a.author.toLowerCase() > b.author.toLowerCase()) {
           console.log("run a ");
@@ -47,7 +46,7 @@ const QuoteList = () => {
           return -1;
         }
       });
-    } else if (queryParams.get("sort") === "desc") {
+    } else if (queryGet === "desc") {
       return [...quotes].reverse().sort((a, b) => {
         if (a.author.toLowerCase() < b.author.toLowerCase()) {
           console.log("run b ");
@@ -60,7 +59,7 @@ const QuoteList = () => {
     } else {
       return [...quotes];
     }
-  }, [queryParams, quotes]);
+  }, [queryGet, quotes]);
 
   // sorting code
 
