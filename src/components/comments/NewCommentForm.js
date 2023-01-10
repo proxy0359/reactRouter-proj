@@ -4,7 +4,7 @@ import { useState } from "react";
 import classes from "./NewCommentForm.module.css";
 import { makeComment } from "../util/api";
 import { set } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { Form, useParams } from "react-router-dom";
 
 const NewCommentForm = (props) => {
   const [nameInput, setNameInput] = useState("");
@@ -59,7 +59,7 @@ const NewCommentForm = (props) => {
   };
 
   return (
-    <form className={classes.form} onSubmit={submitFormHandler}>
+    <Form className={classes.form} method="post">
       <div className={classes.control} onSubmit={submitFormHandler}>
         {nameInputError && <p className={classes.error}>Name is invalid</p>}
         <label htmlFor="name">Name</label>
@@ -78,7 +78,7 @@ const NewCommentForm = (props) => {
       <div className={classes.actions}>
         <button className="btn">Add Comment</button>
       </div>
-    </form>
+    </Form>
   );
 };
 

@@ -1,18 +1,21 @@
-import { Fragment, useEffect, useState, useCallback, useMemo } from "react";
+import { Fragment, useMemo } from "react";
 
 import QuoteItem from "./QuoteItem";
 import classes from "./QuoteList.module.css";
 
 import { getCommentData } from "../util/api";
 
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  useNavigate,
+  useLocation,
+  useLoaderData,
+} from "react-router-dom";
 
 const QuoteList = () => {
-  const [quotes, setQuotes] = useState([]);
-
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+  const data = useLoaderData();
 
   const queryParams = new URLSearchParams(location.search);
   console.log(queryParams);
@@ -24,20 +27,11 @@ const QuoteList = () => {
     navigate({ search: `?sort=${isSortAscending ? "desc" : "asc"}` });
   };
   console.log(navigate);
-  console.log(quotes);
-
-  useEffect(() => {
-    const data = async () => {
-      const commentData = await getCommentData();
-      setQuotes(commentData);
-    };
-
-    data();
-  }, [setQuotes]);
+  console.log(data);
 
   const sortedQuotes = useMemo(() => {
     if (queryGet === "asc") {
-      return [...quotes].sort((a, b) => {
+      return [...data].sort((a, b) => {
         if (a.author.toLowerCase() > b.author.toLowerCase()) {
           console.log("run a ");
           return 1;
@@ -47,7 +41,7 @@ const QuoteList = () => {
         }
       });
     } else if (queryGet === "desc") {
-      return [...quotes].reverse().sort((a, b) => {
+      return [...data].reverse().sort((a, b) => {
         if (a.author.toLowerCase() < b.author.toLowerCase()) {
           console.log("run b ");
           return 1;
@@ -57,9 +51,9 @@ const QuoteList = () => {
         }
       });
     } else {
-      return [...quotes];
+      return [...data];
     }
-  }, [queryGet, quotes]);
+  }, [queryGet, data]);
 
   // sorting code
 
@@ -87,3 +81,7 @@ const QuoteList = () => {
 };
 
 export default QuoteList;
+
+export const loader = () => {
+  return getCommentData();
+};

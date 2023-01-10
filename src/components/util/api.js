@@ -51,6 +51,35 @@ export const getCommentData = async () => {
   }
 };
 
+export const getSingleQuote = async (id) => {
+  try {
+    const response = await fetch(
+      `https://food-order-app-fed0b-default-rtdb.asia-southeast1.firebasedatabase.app/comments.json`
+    );
+
+    if (!response.ok) {
+      throw new Error({ title: "Failed to get the Quote", status: 503 });
+    }
+
+    const data = await response.json();
+
+    let quote = [];
+
+    for (let i in data) {
+      quote.unshift({
+        id: data[i].id,
+        author: data[i].author,
+        text: data[i].text,
+      });
+    }
+    const singleQuote = quote.find((quote) => quote.id === id);
+
+    return singleQuote;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const makeComment = async (data) => {
   try {
     const response = await fetch(
